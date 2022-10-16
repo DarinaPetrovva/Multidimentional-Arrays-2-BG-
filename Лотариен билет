@@ -1,0 +1,100 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace lotarien_bilet
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var line = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            int n = line[0], m = line[1];
+            int[,] ticket = new int[n, m];
+            for (int i = 0; i < n; i++)
+            {
+                line = Console.ReadLine().Split().Select(int.Parse).ToArray();
+                for (int j = 0; j < m; j++)
+                {
+                    ticket[i, j] = line[j];
+                }
+            }
+            int sum1 = 0, sum2 = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                sum1 += ticket[i, i];
+                sum2 += ticket[i, n - 1 - i];
+            }
+
+            int sumAbove = 0;
+            for (int i = 0; i < n - 1; i++)
+            {
+                for (int j = i + 1; j < m; j++)
+                {
+                    sumAbove += ticket[i, j];
+                }
+            }
+
+            int sumBelow = 0;
+            for (int i = 1; i < n; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    sumBelow += ticket[i, j];
+                    
+                }
+            }
+
+            if (sum1 == sum2 && sumAbove % 2 == 0 && sumBelow % 2 == 1)
+            {
+                int sumEven = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    if (ticket[i, i] % 2 == 0)
+                        sumEven += ticket[i, i];
+                   
+                }
+                int sumOutlineRows = 0;
+                for (int j = 0; j < m; j++)
+                {
+                    if (ticket[0, j] % 2 == 0)
+                    {
+                        sumOutlineRows += ticket[0, j];
+                        
+                    }
+                    if (ticket[n - 1, j] % 2 == 0)
+                    {
+                        sumOutlineRows += ticket[n - 1, j];
+                        
+                    }
+
+                }
+
+                int sumOutlineCols = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    if (ticket[i, 0] % 2 == 1)
+                    {
+                        sumOutlineCols += ticket[i, 0];
+                       
+                    }
+                    if (ticket[i, m - 1] % 2 == 1)
+                    {
+                        sumOutlineCols += ticket[i, m - 1];
+                        
+                    }
+                }
+                int sumAll = sumBelow + sumEven + sumOutlineRows + sumOutlineCols;
+               
+                double profit = (double)sumAll /4;
+                Console.WriteLine("YES");
+                Console.WriteLine($"The amount of money won is: {profit:f2}");
+            }
+            else
+            {
+                Console.WriteLine("NO");
+            }
+        }
+    }
+}
